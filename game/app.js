@@ -1,5 +1,6 @@
 import { COLORS, makeBoard, pairKey, winner, mergePair, scoreRun, completeAnswer } from './engine.js';
 import { generateLevel } from './generator.js';
+import { createFeedback } from './feedback.js';
 import { read, write, localScore } from './storage.js';
 
 const $ = selector => document.querySelector(selector);
@@ -17,25 +18,12 @@ const icons = {
 const icon = name => `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${icons[name]}</svg>`;
 const dots = colors => colors.map(c => `<i class="dot ${COLORS[c]}"></i>`).join('');
 const label = colors => colors.map(c => COLORS[c]).join(' ');
-let sound = read('sound', false), audio, state;
+let sound = read('sound', true), state;
+const feedback = createFeedback({ isSoundEnabled: () => sound, reducedMotion: reduced });
+const tone = feedback.tone;
 let mode = read('mode', 'easy') === 'hard' ? 'hard' : 'easy';
 
 function announce(text) { $('#announcer').textContent = text; }
-function tone(success) {
-  if (!sound) return;
-  try {
-    audio ||= new (window.AudioContext || window.webkitAudioContext)();
-    audio.resume();
-    [0, .07, .14].slice(0, success ? 3 : 1).forEach((delay, i) => {
-      const osc = audio.createOscillator(), gain = audio.createGain(), t = audio.currentTime + delay;
-      osc.frequency.value = success ? [523.25, 659.25, 783.99][i] : 155;
-      gain.gain.setValueAtTime(.0001, t);
-      gain.gain.exponentialRampToValueAtTime(.055, t + .01);
-      gain.gain.exponentialRampToValueAtTime(.0001, t + .16);
-      osc.connect(gain); gain.connect(audio.destination); osc.start(t); osc.stop(t + .18);
-    });
-  } catch { /* Sound is optional. */ }
-}
 function header() {
   return `<header class="topbar"><button class="brand home-button" data-action="home" aria-label="Home, choose difficulty"><span class="brand-mark">${dots([0, 1, 2, 3])}</span></button><div class="top-actions"><button class="icon-button" data-action="sound" aria-label="${sound ? 'Mute' : 'Enable'} sound" aria-pressed="${sound}">${icon(sound ? 'sound' : 'muted')}</button><button class="icon-button" data-action="leaderboard" aria-label="Leaderboard">${icon('cup')}</button></div></header>`;
 }
@@ -129,6 +117,7 @@ async function choose(r, c) {
     tone(false); return;
   }
   s.busy = true;
+  feedback.vibrate();
   const result = mergePair(s.board, key);
   for (const token of result.merged) for (const child of token.children) $(`[data-id="${child.id}"]`)?.classList.add('joining');
   tone(true);
@@ -227,6 +216,8 @@ function showLeaderboard() {
   load();
 }
 app.addEventListener('click', event => {
+  // Unlock from a real tap before any asynchronous game work.
+  void feedback.unlock();
   const choice = event.target.closest('[data-mode]');
   if (choice) {
     mode = choice.dataset.mode === 'hard' ? 'hard' : 'easy';
