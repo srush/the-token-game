@@ -1,5 +1,5 @@
 export const COLORS = ['coral', 'blue', 'gold', 'mint'];
-export const VERSION = '2';
+export const VERSION = '3';
 export const pairKey = (a, b) => `${a.key}|${b.key}`;
 export function makeBoard(rows) {
   let id = 0;

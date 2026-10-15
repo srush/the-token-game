@@ -6,7 +6,7 @@ const levels = [];
 for (let index = 0; index < 12; index++) {
   const colors = index === 0 ? 2 : index < 3 ? 3 : 4;
   const rowCount = 8;
-  const width = index === 0 ? 6 : 8;
+  const width = index === 0 ? 6 : 7;
   const rounds = index === 0 ? 2 : 5;
   let found;
   for (let attempt = 0; attempt < 1000000; attempt++) {

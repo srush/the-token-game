@@ -78,6 +78,7 @@ test('random boards stay solvable with a clear opening and vary across attempts'
       const steps = solution(level);
       assert.equal(steps.length, level.rounds);
       assert.equal(level.rounds, index === 0 ? 2 : 5);
+      assert.ok(level.rows.every(row => row.length === (index === 0 ? 6 : 7)));
       assert.ok(steps[0].gap >= 3);
       assert.ok(steps.every(step => step.gap > 0));
       assert.ok(replay(level, solve(level)).complete);
@@ -98,6 +99,7 @@ test('hard mode uses eight rows except for the small tutorial and preserves uniq
       const steps = solution(level);
       assert.equal(steps.length, level.rounds);
       assert.equal(level.rounds, index === 0 ? 2 : 5);
+      assert.ok(level.rows.every(row => row.length === (index === 0 ? 6 : 7)));
       assert.ok(steps[0].gap >= 3);
       assert.ok(steps.every(step => step.gap > 0));
       assert.ok(replay(level, solve(level)).complete);

@@ -6,11 +6,11 @@ const levels = [];
 for (let index = 0; index < 12; index++) {
   const colors = index === 0 ? 2 : index < 3 ? 3 : 4;
   const rowCount = index === 0 ? 3 : index < 5 ? 4 : index < 7 ? 5 : 7;
-  const width = index === 0 ? 6 : 8;
+  const width = index === 0 ? 6 : 7;
   const rounds = index === 0 ? 2 : 5;
   let found;
   for (let attempt = 0; attempt < 1000000; attempt++) {
-    const rows = Array.from({ length: rowCount }, () => Array.from({ length: width }, () => Math.floor(random() ** 1.7 * colors)));
+    const rows = Array.from({ length: rowCount }, () => Array.from({ length: width }, () => Math.floor(random() ** 3 * colors)));
     const level = { id: index, rows, rounds, seconds: index === 0 ? 90 : Math.max(40, 70 - index * 2) };
     const steps = solution(level);
     // Avoid an overlapping same-color opening in the tutorial.
