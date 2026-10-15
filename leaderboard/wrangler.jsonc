@@ -1,0 +1,16 @@
+{
+  "$schema": "node_modules/wrangler/config-schema.json",
+  "name": "the-token-game-leaderboard",
+  "main": "worker.js",
+  "compatibility_date": "2026-10-15",
+  "vars": {
+    "ALLOWED_ORIGIN": "http://127.0.0.1:5173"
+  },
+  "d1_databases": [
+    {
+      "binding": "DB",
+      "database_name": "the-token-game",
+      "database_id": "REPLACE_WITH_D1_DATABASE_ID"
+    }
+  ]
+}
