@@ -59,7 +59,7 @@
 .failed-result .result-time-bar { background: #f0d6d6; }
 @keyframes level-fail { 0%,100% { transform: translateX(0); } 20%,60% { transform: translateX(-5px); } 40%,80% { transform: translateX(5px); } }
 
-.tutorial-intro { font-size: 15px; line-height: 1.7; color: #636b82; margin: 0 0 24px; }
+.tutorial-intro { text-align: center; font-size: 15px; line-height: 1.7; color: #636b82; margin: 0 0 24px; }
 .tutorial-intro a { color: #7770cf; text-decoration: underline; text-underline-offset: 3px; }
 
 .home-button { padding: 8px; border: 0; background: transparent; border-radius: 10px; }
